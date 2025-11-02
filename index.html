@@ -1,13 +1,387 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Carbine | دستیار هوشمند خودرو</title>
-  <link rel="stylesheet" href="style.css" />
-  <script defer src="script.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #1f0f02;
+      --primary: #e2b24d;
+      --secondary: #fbd20a;
+      --text-light: #fbd20a;
+      --text-dark: #1f0f02;
+      --card-bg: rgba(31, 15, 2, 0.75);
+      --card-border: #e2b24d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Vazirmatn', sans-serif;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: white;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Animated Background Elements */
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(rgba(31, 15, 2, 0.88), rgba(31, 15, 2, 0.92)),
+        url('https://placehold.co/1920x1080/1a0c01/2a1504?text=Luxury+Car+Dashboard') no-repeat center center/cover;
+      z-index: -1;
+    }
+
+    .moving-lights {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .light {
+      position: absolute;
+      width: 4px;
+      height: 60px;
+      background: linear-gradient(to top, transparent, var(--primary), transparent);
+      animation: moveLight 8s infinite linear;
+    }
+
+    .light:nth-child(1) { left: 10%; animation-delay: 0s; height: 80px; }
+    .light:nth-child(2) { left: 25%; animation-delay: 2s; height: 100px; }
+    .light:nth-child(3) { left: 45%; animation-delay: 4s; height: 70px; }
+    .light:nth-child(4) { left: 65%; animation-delay: 1s; height: 90px; }
+    .light:nth-child(5) { left: 85%; animation-delay: 3s; height: 75px; }
+
+    @keyframes moveLight {
+      0% { top: 100%; opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { top: -100px; opacity: 0; }
+    }
+
+    /* نوار بالای صفحه */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2.5rem;
+      background: rgba(0, 0, 0, 0.5);
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      animation: slideInDown 0.8s ease-out;
+    }
+
+    .logo {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .navbar a {
+      margin-left: 1.5rem;
+      color: var(--secondary);
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    .navbar a:hover {
+      color: var(--primary);
+    }
+
+    /* بخش اصلی Hero */
+    .hero {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      min-height: 85vh;
+      text-align: center;
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 700px;
+      z-index: 2;
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    .hero-content h1 {
+      font-size: 3.2rem;
+      color: var(--secondary);
+      margin-bottom: 1.2rem;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      animation: pulse 2s infinite;
+    }
+
+    .hero-content p {
+      font-size: 1.25rem;
+      line-height: 1.7;
+      margin-bottom: 2.2rem;
+      color: var(--primary);
+    }
+
+    .btn {
+      padding: 0.9rem 2rem;
+      border-radius: 50px;
+      font-weight: 700;
+      text-decoration: none;
+      margin: 0.5rem;
+      display: inline-block;
+      transition: all 0.3s ease;
+      text-align: center;
+      min-width: 200px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn.primary {
+      background: var(--primary);
+      color: var(--text-dark);
+      box-shadow: 0 4px 12px rgba(226, 178, 77, 0.4);
+    }
+
+    .btn.secondary {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .btn.primary:hover {
+      background: var(--secondary);
+      box-shadow: 0 6px 16px rgba(251, 210, 10, 0.5);
+    }
+
+    .btn.secondary:hover {
+      background: rgba(226, 178, 77, 0.15);
+    }
+
+    /* ویژگی‌ها */
+    .features {
+      padding: 5rem 2rem;
+      background: #2a1504;
+      position: relative;
+    }
+
+    .features::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), var(--primary), transparent);
+    }
+
+    .features h2 {
+      color: var(--secondary);
+      margin-bottom: 3rem;
+      font-size: 2.2rem;
+      text-align: center;
+      animation: fadeInUp 1s ease 0.2s both;
+    }
+
+    .feature-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .feature-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.2rem 1.8rem;
+      transition: transform 0.4s, box-shadow 0.4s;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .feature-item:nth-child(1) { animation-delay: 0.3s; }
+    .feature-item:nth-child(2) { animation-delay: 0.5s; }
+    .feature-item:nth-child(3) { animation-delay: 0.7s; }
+
+    .feature-item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 25px rgba(226, 178, 77, 0.25);
+    }
+
+    .feature-item h3 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+    }
+
+    .feature-item p {
+      color: var(--text-light);
+      opacity: 0.95;
+    }
+
+    /* دانلود */
+    .download {
+      text-align: center;
+      padding: 5rem 2rem;
+      background: 
+        linear-gradient(to bottom, rgba(42, 21, 4, 0.9), rgba(31, 15, 2, 0.95)),
+        url('https://placehold.co/1200x400/1a0c01/2a1504?text=Smart+Car+Tech') no-repeat center center/cover;
+    }
+
+    .download h2 {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      animation: fadeIn 1s ease 0.5s both;
+    }
+
+    .download p {
+      color: var(--secondary);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      font-size: 1.1rem;
+      animation: fadeIn 1s ease 0.7s both;
+    }
+
+    /* فوتر */
+    .footer {
+      text-align: center;
+      padding: 2rem;
+      background: #000;
+      font-size: 0.95rem;
+      color: var(--primary);
+      border-top: 1px solid rgba(226, 178, 77, 0.3);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideInDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .navbar nav {
+        display: flex;
+        gap: 1.5rem;
+      }
+
+      .hero-content h1 {
+        font-size: 2.4rem;
+      }
+
+      .hero-content p {
+        font-size: 1.1rem;
+      }
+
+      .buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .btn {
+        width: 90%;
+        max-width: 280px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-content h1 {
+        font-size: 2rem;
+      }
+      
+      .moving-lights .light {
+        height: 40px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <!-- Animated Background -->
+  <div class="hero-bg"></div>
+  <div class="moving-lights">
+    <div class="light"></div>
+    <div class="light"></div>
+    <div class="light"></div>
+    <div class="light"></div>
+    <div class="light"></div>
+  </div>
+
   <!-- نوار بالا -->
   <header class="navbar">
     <div class="logo">🚗 Carbine</div>
@@ -62,5 +436,37 @@
   <footer id="contact" class="footer">
     <p>© 2025 Carbin — تمام حقوق محفوظ است.</p>
   </footer>
+
+  <script>
+    // انیمیشن اسکرول نرم برای لینک‌های ناوبری
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelector(anchor.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Intersection Observer برای انیمیشن‌های scroll-based
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animationPlayState = 'running';
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.feature-item').forEach(item => {
+      item.style.animationPlayState = 'paused';
+      observer.observe(item);
+    });
+  </script>
 </body>
 </html>
+
